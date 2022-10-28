@@ -21,7 +21,8 @@ import SeedlingEditingModal from "../components/SeedlingEditingModal";
 
 export default function gardenPlanEditor({ data }) {
   const [settings, dispatchSetting] = useContext(SettingsContext);
-  const { planDetails, planning } = data;
+  console.log(data);
+  const { planDetails, planning } = data.gardenPlan;
   const planningObj = planning && JSON.parse(planning);
   const [state, dispatch] = useReducer(gardenPlanReducer, {
     ...initialState,
@@ -353,12 +354,22 @@ export async function getStaticProps() {
   const { data } = await client.query({
     query: gql`
       query GardenPlan {
-        gardenPlan(id: "tiny-ibiza-garden", idType: SLUG) {
+        gardenPlan(id: 12, idType: DATABASE_ID) {
           planDetails {
             actualLength
             actualWidth
           }
           planning
+        }
+        plants {
+          nodes {
+            plantData {
+              plantIcon {
+                mediaItemUrl
+                title
+              }
+            }
+          }
         }
       }
     `,
@@ -366,7 +377,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      data: data.gardenPlan,
+      data: data,
     },
   };
 }

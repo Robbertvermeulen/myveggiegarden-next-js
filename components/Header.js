@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Logo from "../public/logo.svg";
+import AvatarImage from "../public/avatar.png";
 
 const Header = () => {
   return (
@@ -26,7 +27,7 @@ const Header = () => {
       </ul>
       <div className="flex justify-center items-center space-x-2">
         <div className="rounded-full w-12 h-12 lg:w-14 lg:h-14 border border-[rgba(0,0,0,0.25)] overflow-hidden cursor-pointer">
-          <img src="<?php echo GPPT_URL . '/assets/images/avatar.png'; ?>" />
+          <Image src={AvatarImage} alt="avatar" />
         </div>
       </div>
     </div>
