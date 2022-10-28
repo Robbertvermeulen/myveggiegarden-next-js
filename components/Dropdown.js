@@ -7,8 +7,10 @@ const Dropdown = ({ label, className, options, value, changeHandler }) => {
         value={value}
         onChange={changeHandler}
       >
-        {options?.map((option) => (
-          <option value={option.value}>{option.name}</option>
+        {options?.map((option, index) => (
+          <option value={option.value} key={index}>
+            {option.name}
+          </option>
         ))}
       </select>
     </div>

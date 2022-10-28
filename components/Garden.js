@@ -200,7 +200,7 @@ const Garden = ({
             : actualWidth
         }
       />
-      <div class="garden-grid">{renderGridItems()}</div>
+      <div className="garden-grid">{renderGridItems()}</div>
     </div>
   );
 };

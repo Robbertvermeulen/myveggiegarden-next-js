@@ -22,7 +22,9 @@ const Ruler = ({ type, sizeInPixels, actualSize }) => {
   };
 
   return (
-    <div class={`garden-ruler garden-ruler-${type}`}>{renderRulerItems()}</div>
+    <div className={`garden-ruler garden-ruler-${type}`}>
+      {renderRulerItems()}
+    </div>
   );
 };
 
