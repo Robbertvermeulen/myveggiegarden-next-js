@@ -1,11 +1,17 @@
-import { useReducer, useContext, useState, useEffect } from "react";
-import { gql } from "@apollo/client";
-import client from "../../utils/apollo-client";
+import {
+  useReducer,
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
+import { useRouter } from "next/router";
 import { SettingsContext } from "../../context/SettingsContext";
 import {
-  GardenPlanEditorContext,
-  GardenPlanEditorContextProvider,
-} from "../../context/GardenPlanEditorContext";
+  gardenPlanReducer,
+  initialState,
+} from "../../reducers/gardenPlanReducer";
+import { getGardenPlanById } from "../../utils/api";
 import Head from "next/head";
 import Header from "../../components/Header";
 import GardenAreasList from "../../components/GardenAreasList";
@@ -21,9 +27,12 @@ import PointInTimeSelector from "../../components/PointInTimeSelector";
 import SoilEditingModal from "../../components/SoilEditingModal";
 import SeedlingEditingModal from "../../components/SeedlingEditingModal";
 
-export default function GardenPlanEditorPage({ data }) {
+const GardenPlanEditorContext = createContext();
+
+export default function GardenPlanEditorPage() {
+  const router = useRouter();
   const [settings, dispatchSetting] = useContext(SettingsContext);
-  const [state, dispatch] = useContext(GardenPlanEditorContext);
+  const [state, dispatch] = useReducer(gardenPlanReducer, initialState);
   const [pointInTimeSelector, setPointInTimeSelector] = useState(false);
   const [editingObject, setEditingObject] = useState({
     type: null,
@@ -33,6 +42,23 @@ export default function GardenPlanEditorPage({ data }) {
   useEffect(() => {
     dispatchSetting({ type: "change_edit_mode", payload: true });
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      const gardenPlan = await getGardenPlanById(router.query.id);
+      if (gardenPlan) {
+        const { title, planDetails, planning } = gardenPlan;
+        dispatch({
+          type: "set_state",
+          payload: {
+            title,
+            actualLength: planDetails.actualLength,
+            actualWidth: planDetails.actualWidth,
+          },
+        });
+      }
+    })();
+  }, [router.query.id]);
 
   const getSoil = (id) => {
     let soil = false;
@@ -124,7 +150,7 @@ export default function GardenPlanEditorPage({ data }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <GardenPlanEditorContextProvider>
+      <GardenPlanEditorContext.Provider value={[state, dispatch]}>
         <main className="px-4 py-6 lg:py-12 bg-[#f9f8f2] border-t border-t-[rgba(0,0,0,0.1)] shadow-inner">
           <div className="container mx-auto">
             <div className="garden-plan-editor">
@@ -140,6 +166,7 @@ export default function GardenPlanEditorPage({ data }) {
                           type="text"
                           label={`Garden name`}
                           placeholder={`My vegetable garden`}
+                          value={state.title}
                         />
                       </div>
                       <div className="mb-5">
@@ -340,7 +367,7 @@ export default function GardenPlanEditorPage({ data }) {
             </div>
           </div>
         </main>
-      </GardenPlanEditorContextProvider>
+      </GardenPlanEditorContext.Provider>
     </>
   );
 }

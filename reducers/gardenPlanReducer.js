@@ -6,6 +6,12 @@ const createId = () => {
 };
 
 export const initialState = {
+  title: null,
+  location: {
+    address: null,
+    longitude: null,
+    latitude: null,
+  },
   actualLength: 20,
   actualWidth: 10,
   areas: [],
@@ -16,6 +22,8 @@ export const initialState = {
 export const gardenPlanReducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
+    case "set_state":
+      return { ...state, ...payload };
     case "add_area":
       const areaId = createId();
       return {
