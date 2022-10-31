@@ -2,15 +2,18 @@ import client from "../../utils/apollo-client";
 import { gql } from "@apollo/client";
 import Head from "next/head";
 import Header from "../../components/Header";
-import GardenPlan from "./GardenPlan";
+import GardenPlan from "../../components/GardenPlan";
 
 export default function GardenPage({ data }) {
-  const pageTitle = data.gardenPlan.title;
+  const { title, planDetails, planning, location } = data.gardenPlan;
+  const { actualLength, actualWidth } = planDetails;
+  const areas = planning?.areas || [];
+  const seedlings = planning?.seedlings || [];
 
   return (
     <>
       <Head>
-        <title>{pageTitle} - Myveggiegarden.how</title>
+        <title>{title} - Myveggiegarden.how</title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -20,7 +23,7 @@ export default function GardenPage({ data }) {
           <div className="container mx-auto px-4 md:px-8 lg:px-3 py-10 flex flex-wrap flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <h1 className="text-white font-semibold text-3xl mb-1 font-serif">
-                {pageTitle}
+                {title}
               </h1>
               <span className="text-white text-sm">By Robbert Vermeulen</span>
             </div>
@@ -60,13 +63,17 @@ export default function GardenPage({ data }) {
                     </h2>
                   </header>
                   <ul className="flex flex-wrap">
-                    <li className="w-1/2 lg:w-full py-4 lg:pb-4 border-b">
-                      <span className="block font-semibold">Location</span>
-                      <span>Ibiza, Spain</span>
-                    </li>
+                    {location && (
+                      <li className="w-1/2 lg:w-full py-4 lg:pb-4 border-b">
+                        <span className="block font-semibold">Location</span>
+                        <span>{`${location.city}, ${location.country}`}</span>
+                      </li>
+                    )}
                     <li className="w-1/2 lg:w-full py-4 border-b">
                       <span className="block font-semibold">Dimensions</span>
-                      <span>10m x 5m</span>
+                      <span>{`${actualLength / 2}m x ${
+                        actualWidth / 2
+                      }m`}</span>
                     </li>
                     <li className="w-1/2 lg:w-full py-4 border-b">
                       <span className="block font-semibold">
@@ -148,7 +155,12 @@ export default function GardenPage({ data }) {
             <div className="col-span-full lg:col-span-9">
               <div className="px-3 md:px-8 lg:px-0">
                 <div className="mb-8">
-                  <GardenPlan />
+                  <GardenPlan
+                    actualLength={actualLength}
+                    actualWidth={actualWidth}
+                    areas={areas}
+                    seedlings={seedlings}
+                  />
                 </div>
               </div>
             </div>
@@ -168,6 +180,10 @@ export async function getServerSideProps({ params }) {
           planDetails {
             actualLength
             actualWidth
+            location {
+              city
+              country
+            }
           }
           planning
         }

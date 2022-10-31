@@ -1,15 +1,10 @@
-import { useContext } from "react";
-import { GardenPlanContext } from "../context/GardenPlanContext";
 import DisplayDirectionSelector from "./DisplayDirectionSelector";
 import WeekSelector from "./WeekSelector";
 import GardenCanvas from "./GardenCanvas";
 import Garden from "./Garden";
 import GardenSeedling from "./GardenSeedlings";
 
-const GardenPlan = () => {
-  const [gardenPlan] = useContext(GardenPlanContext);
-  const { actualLength, actualWidth, areas, seedling } = gardenPlan;
-
+const GardenPlan = ({ actualLength, actualWidth, areas, seedlings }) => {
   return (
     <div className="garden-plan">
       <header className="mb-6 flex flex-wrap lg:flex-nowrap flex-col lg:flex-row justify-between items-center">
@@ -32,11 +27,11 @@ const GardenPlan = () => {
       </div>
       <header className="mb-6 flex flex-wrap lg:flex-nowrap flex-col lg:flex-row justify-between items-center">
         <h2 className="mb-4 md:mb-0 font-semibold text-2xl font-serif">
-          Seedling
+          Seedlings
         </h2>
         <WeekSelector />
       </header>
-      <GardenSeedling seedling={seedling} />
+      <GardenSeedling seedlings={seedlings} />
     </div>
   );
 };

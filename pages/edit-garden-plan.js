@@ -20,15 +20,6 @@ import SeedlingEditingModal from "../components/SeedlingEditingModal";
 
 export default function gardenPlanEditor({ data }) {
   const [settings, dispatchSetting] = useContext(SettingsContext);
-  const { planDetails, planning } = data.gardenPlan;
-  const planningObj = planning && JSON.parse(planning);
-  const [state, dispatch] = useReducer(gardenPlanReducer, {
-    ...initialState,
-    actualLength: planDetails?.actualLength,
-    actualWidth: planDetails?.actualWidth,
-    areas: planningObj?.areas || [],
-    seedlings: planningObj?.seedlings || [],
-  });
   const [pointInTimeSelector, setPointInTimeSelector] = useState(false);
   const [editingObject, setEditingObject] = useState({
     type: null,
@@ -342,36 +333,4 @@ export default function gardenPlanEditor({ data }) {
       </div>
     </>
   );
-}
-
-export async function getServerSideProps() {
-  const { data } = await client.query({
-    query: gql`
-      query GardenPlan {
-        gardenPlan(id: 12, idType: DATABASE_ID) {
-          planDetails {
-            actualLength
-            actualWidth
-          }
-          planning
-        }
-        plants {
-          nodes {
-            plantData {
-              plantIcon {
-                mediaItemUrl
-                title
-              }
-            }
-          }
-        }
-      }
-    `,
-  });
-
-  return {
-    props: {
-      data: data,
-    },
-  };
 }

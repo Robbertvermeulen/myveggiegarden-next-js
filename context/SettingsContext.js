@@ -26,7 +26,6 @@ const SettingsProvider = ({ children }) => {
   const { loading, error, data } = useQuery(GET_PLANTS, { client });
 
   if (!loading && !error && data) {
-    console.log("test");
     // console.log(data);
     // console.log(
     //   data?.plants?.nodes?.map((node) => {
