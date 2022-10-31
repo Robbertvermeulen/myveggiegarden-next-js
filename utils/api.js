@@ -1,6 +1,27 @@
 import { gql } from "@apollo/client";
 import client from "./apollo-client";
 
+export const getAllPlants = async () => {
+  const { data } = await client.query({
+    query: gql`
+      query PlantData {
+        plants {
+          nodes {
+            plantId
+            title
+            plantData {
+              plantIcon {
+                mediaItemUrl
+              }
+            }
+          }
+        }
+      }
+    `,
+  });
+  return data?.plants?.nodes;
+};
+
 export const getGardenPlanById = async (id) => {
   const { data } = await client.query({
     query: gql`
@@ -20,5 +41,5 @@ export const getGardenPlanById = async (id) => {
         }
       `,
   });
-  return data && data.gardenPlan;
+  return data?.gardenPlan;
 };

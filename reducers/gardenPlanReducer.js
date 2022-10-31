@@ -6,11 +6,11 @@ const createId = () => {
 };
 
 export const initialState = {
-  title: null,
+  title: "",
   location: {
-    address: null,
-    longitude: null,
-    latitude: null,
+    address: "",
+    longitude: "",
+    latitude: "",
   },
   actualLength: 20,
   actualWidth: 10,

@@ -145,7 +145,7 @@ export default function GardenPlanEditorPage() {
   return (
     <>
       <Head>
-        <title>Edit garden plan - Myveggiegarden.how</title>
+        <title>Edit Garden Plan - Myveggiegarden.how</title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -153,216 +153,211 @@ export default function GardenPlanEditorPage() {
       <GardenPlanEditorContext.Provider value={[state, dispatch]}>
         <main className="px-4 py-6 lg:py-12 bg-[#f9f8f2] border-t border-t-[rgba(0,0,0,0.1)] shadow-inner">
           <div className="container mx-auto">
-            <div className="garden-plan-editor">
-              <div className="grid gap-4 lg:grid-cols-12 lg:gap-10">
-                <div className="col-span-full lg:col-span-3">
-                  <div className="p-8 rounded bg-white border border-[rgba(0,0,0,0.15)] shadow-sm">
-                    <header className="mb-5 pb-3 border-b border-b-[rgba(0,0,0,0.2)] border-dotted">
-                      <h2 className="font-semibold text-xl">Garden details</h2>
-                    </header>
-                    <div className="mb-6">
-                      <div className="mb-5">
-                        <Field
-                          type="text"
-                          label={`Garden name`}
-                          placeholder={`My vegetable garden`}
-                          value={state.title}
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <Field
-                          type="number"
-                          label={`Length (${settings.sizeUnit})`}
-                          placeholder={settings.sizeUnit}
-                          value={
-                            (state.actualLength && state.actualLength / 2) || ""
-                          }
-                          changeHandler={(e) =>
-                            dispatch({
-                              type: "change_actual_length",
-                              payload: { value: e.target.value },
-                            })
-                          }
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <Field
-                          type="number"
-                          label={`Width (${settings.sizeUnit})`}
-                          placeholder={settings.sizeUnit}
-                          value={
-                            (state.actualWidth && state.actualWidth / 2) || ""
-                          }
-                          changeHandler={(e) =>
-                            dispatch({
-                              type: "change_actual_width",
-                              payload: { value: e.target.value },
-                            })
-                          }
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <Field
-                          type="text"
-                          label={`Location`}
-                          placeholder={"Search location.."}
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <div>
-                          <Dropdown
-                            label={`Garden facing`}
-                            options={[
-                              { name: "North", value: "north" },
-                              { name: "East", value: "east" },
-                              { name: "West", value: "west" },
-                              { name: "South", value: "south" },
-                            ]}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <button className="button button-primary shadow-md">
-                      Save
-                    </button>
-                  </div>
-                </div>
-                <div className="col-span-full lg:col-span-9 relative">
+            <div className="grid gap-4 lg:grid-cols-12 lg:gap-10">
+              <div className="col-span-full lg:col-span-3">
+                <div className="p-8 rounded bg-white border border-[rgba(0,0,0,0.15)] shadow-sm">
+                  <header className="mb-5 pb-3 border-b border-b-[rgba(0,0,0,0.2)] border-dotted">
+                    <h2 className="font-semibold text-xl">Garden details</h2>
+                  </header>
                   <div className="mb-6">
-                    <div className="mb-6">
-                      <header className="p-4 flex flex-wrap lg:flex-nowrap flex-col lg:flex-row items-center justify-between rounded-t bg-white border border-[rgba(0,0,0,0.15)] shadow-sm">
-                        <div className="flex gap-3">
-                          <DisplayDirectionSelector />
-                          <WeekSelector
-                            valueClickHandler={() =>
-                              setPointInTimeSelector(true)
-                            }
-                          />
-                        </div>
-                        <div>
-                          <button className="button button-primary shadow-md hidden lg:block">
-                            Save
-                          </button>
-                        </div>
-                      </header>
-                      <div className="p-5 rounded-b bg-[rgba(0,0,0,0.05)] shadow-inner">
-                        <GardenAreasList
-                          areas={state.areas}
-                          addAreaHandler={() =>
-                            dispatch({
-                              type: "add_area",
-                            })
-                          }
-                          deleteAreaHandler={(id) =>
-                            dispatch({ type: "delete_area", payload: { id } })
-                          }
-                          clickAreaHandler={(id) =>
-                            dispatch({
-                              type: "change_selected_area",
-                              payload: { id },
-                            })
-                          }
-                          selectedArea={state.selectedArea}
-                        />
-                      </div>
+                    <div className="mb-5">
+                      <Field
+                        type="text"
+                        label={`Garden name`}
+                        placeholder={`My vegetable garden`}
+                        value={state.title}
+                      />
                     </div>
-                    {settings.tool === "copy_plant" && (
-                      <div
-                        className="mb-3 px-3 py-3 bg-orange-500 rounded text-white text-center cursor-pointer"
-                        onClick={() => {
-                          console.log("clicked");
-                          dispatchSetting({
-                            type: "deactivate_tool",
-                            payload: { tool: "copy_plant" },
-                          });
-                        }}
-                      >
-                        Copy/paste mode active |{" "}
-                        <span className="underline font-semibold">
-                          Turn off
-                        </span>
-                      </div>
-                    )}
-                    <GardenCanvas>
-                      <Garden
-                        actualLength={state.actualLength}
-                        actualWidth={state.actualWidth}
-                        areas={state.areas}
-                        selectedArea={state.selectedArea}
-                        changeSelectedAreaHandler={(areaId) => {
+                    <div className="mb-5">
+                      <Field
+                        type="number"
+                        label={`Length (${settings.sizeUnit})`}
+                        placeholder={settings.sizeUnit}
+                        value={
+                          (state.actualLength && state.actualLength / 2) || ""
+                        }
+                        changeHandler={(e) =>
                           dispatch({
-                            type: "change_selected_area",
-                            payload: { id: areaId },
-                          });
-                        }}
-                        addSoilHandler={(xPosition, yPosition) =>
-                          dispatch({
-                            type: "add_soil",
-                            payload: { xPosition, yPosition },
+                            type: "change_actual_length",
+                            payload: { value: e.target.value },
                           })
                         }
-                        editingObjectHandler={setEditingObject}
-                        addPlantHandler={addPlantToSoil}
-                      ></Garden>
-                    </GardenCanvas>
-                  </div>
-                  <div>
-                    <header className="mb-6 flex lg:flex-nowrap lg:flex-row justify-between items-center">
-                      <h2 className="font-semibold text-2xl">Seedlings</h2>
-                      <WeekSelector
-                        valueClickHandler={() => setPointInTimeSelector(true)}
                       />
+                    </div>
+                    <div className="mb-5">
+                      <Field
+                        type="number"
+                        label={`Width (${settings.sizeUnit})`}
+                        placeholder={settings.sizeUnit}
+                        value={
+                          (state.actualWidth && state.actualWidth / 2) || ""
+                        }
+                        changeHandler={(e) =>
+                          dispatch({
+                            type: "change_actual_width",
+                            payload: { value: e.target.value },
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="mb-5">
+                      <Field
+                        type="text"
+                        label={`Location`}
+                        placeholder={"Search location.."}
+                        value={state.location.address}
+                      />
+                    </div>
+                    <div className="mb-5">
+                      <div>
+                        <Dropdown
+                          label={`Garden facing`}
+                          options={[
+                            { name: "North", value: "north" },
+                            { name: "East", value: "east" },
+                            { name: "West", value: "west" },
+                            { name: "South", value: "south" },
+                          ]}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <button className="button button-primary shadow-md">
+                    Save
+                  </button>
+                </div>
+              </div>
+              <div className="col-span-full lg:col-span-9 relative">
+                <div className="mb-6">
+                  <div className="mb-6">
+                    <header className="p-4 flex flex-wrap lg:flex-nowrap flex-col lg:flex-row items-center justify-between rounded-t bg-white border border-[rgba(0,0,0,0.15)] shadow-sm">
+                      <div className="flex gap-3">
+                        <DisplayDirectionSelector />
+                        <WeekSelector
+                          valueClickHandler={() => setPointInTimeSelector(true)}
+                        />
+                      </div>
+                      <div>
+                        <button className="button button-primary shadow-md hidden lg:block">
+                          Save
+                        </button>
+                      </div>
                     </header>
-                    <GardenSeedlings
-                      seedling={state.seedlings}
-                      addButtonClickHandler={() =>
-                        setEditingObject({
-                          type: "seedling",
-                        })
-                      }
-                      itemClickHandler={(seedlingId) => {
-                        setEditingObject({
-                          type: "seedling",
-                          id: seedlingId,
+                    <div className="p-5 rounded-b bg-[rgba(0,0,0,0.05)] shadow-inner">
+                      <GardenAreasList
+                        areas={state.areas}
+                        addAreaHandler={() =>
+                          dispatch({
+                            type: "add_area",
+                          })
+                        }
+                        deleteAreaHandler={(id) =>
+                          dispatch({ type: "delete_area", payload: { id } })
+                        }
+                        clickAreaHandler={(id) =>
+                          dispatch({
+                            type: "change_selected_area",
+                            payload: { id },
+                          })
+                        }
+                        selectedArea={state.selectedArea}
+                      />
+                    </div>
+                  </div>
+                  {settings.tool === "copy_plant" && (
+                    <div
+                      className="mb-3 px-3 py-3 bg-orange-500 rounded text-white text-center cursor-pointer"
+                      onClick={() => {
+                        console.log("clicked");
+                        dispatchSetting({
+                          type: "deactivate_tool",
+                          payload: { tool: "copy_plant" },
                         });
                       }}
-                    />
-                  </div>
-                  {pointInTimeSelector && (
-                    <Modal
-                      noStyling={true}
-                      overlayClickHandler={() => setPointInTimeSelector(false)}
                     >
-                      <PointInTimeSelector
-                        areas={state.areas}
-                        seedlings={state.seedlings}
-                        weekClickHandler={() => setPointInTimeSelector(false)}
-                      />
-                    </Modal>
+                      Copy/paste mode active |{" "}
+                      <span className="underline font-semibold">Turn off</span>
+                    </div>
                   )}
-                  {(editingObject.type === "soil" && (
-                    <SoilEditingModal
-                      editingId={editingObject?.id}
-                      getSoilHandler={getSoil}
-                      closeModalHandler={closeEditingModal}
+                  <GardenCanvas>
+                    <Garden
+                      actualLength={state.actualLength}
+                      actualWidth={state.actualWidth}
+                      areas={state.areas}
+                      selectedArea={state.selectedArea}
+                      changeSelectedAreaHandler={(areaId) => {
+                        dispatch({
+                          type: "change_selected_area",
+                          payload: { id: areaId },
+                        });
+                      }}
+                      addSoilHandler={(xPosition, yPosition) =>
+                        dispatch({
+                          type: "add_soil",
+                          payload: { xPosition, yPosition },
+                        })
+                      }
+                      editingObjectHandler={setEditingObject}
                       addPlantHandler={addPlantToSoil}
-                      deleteSoilHandler={deleteSoil}
-                      editPlantHandler={editSoilPlant}
-                      deletePlantHandler={deleteSoilPlant}
-                      validateAddPlantToSoilHandler={validateAddPlantToSoil}
-                    />
-                  )) ||
-                    (editingObject.type === "seedling" && (
-                      <SeedlingEditingModal
-                        editingId={editingObject?.id}
-                        getSeedlingHandler={getSeedling}
-                        closeModalHandler={closeEditingModal}
-                        addSeedlingHandler={addSeedling}
-                        editSeedlingHandler={editSeedling}
-                        deleteSeedlingHandler={deleteSeedling}
-                      />
-                    ))}
+                    ></Garden>
+                  </GardenCanvas>
                 </div>
+                <div>
+                  <header className="mb-6 flex lg:flex-nowrap lg:flex-row justify-between items-center">
+                    <h2 className="font-semibold text-2xl">Seedlings</h2>
+                    <WeekSelector
+                      valueClickHandler={() => setPointInTimeSelector(true)}
+                    />
+                  </header>
+                  <GardenSeedlings
+                    seedlings={state.seedlings}
+                    addButtonClickHandler={() =>
+                      setEditingObject({
+                        type: "seedling",
+                      })
+                    }
+                    itemClickHandler={(seedlingId) => {
+                      setEditingObject({
+                        type: "seedling",
+                        id: seedlingId,
+                      });
+                    }}
+                  />
+                </div>
+                {pointInTimeSelector && (
+                  <Modal
+                    noStyling={true}
+                    overlayClickHandler={() => setPointInTimeSelector(false)}
+                  >
+                    <PointInTimeSelector
+                      areas={state.areas}
+                      seedlings={state.seedlings}
+                      weekClickHandler={() => setPointInTimeSelector(false)}
+                    />
+                  </Modal>
+                )}
+                {(editingObject.type === "soil" && (
+                  <SoilEditingModal
+                    editingId={editingObject?.id}
+                    getSoilHandler={getSoil}
+                    closeModalHandler={closeEditingModal}
+                    addPlantHandler={addPlantToSoil}
+                    deleteSoilHandler={deleteSoil}
+                    editPlantHandler={editSoilPlant}
+                    deletePlantHandler={deleteSoilPlant}
+                    validateAddPlantToSoilHandler={validateAddPlantToSoil}
+                  />
+                )) ||
+                  (editingObject.type === "seedling" && (
+                    <SeedlingEditingModal
+                      editingId={editingObject?.id}
+                      getSeedlingHandler={getSeedling}
+                      closeModalHandler={closeEditingModal}
+                      addSeedlingHandler={addSeedling}
+                      editSeedlingHandler={editSeedling}
+                      deleteSeedlingHandler={deleteSeedling}
+                    />
+                  ))}
               </div>
             </div>
           </div>

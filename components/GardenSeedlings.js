@@ -8,6 +8,7 @@ const GardenSeedlings = ({
   itemClickHandler,
 }) => {
   const [settings] = useContext(SettingsContext);
+  const plantList = settings.plants || [];
   const nowSeedlings = useMemo(() => {
     return (
       seedlings?.filter((item) =>
@@ -17,15 +18,15 @@ const GardenSeedlings = ({
   }, [seedlings, settings.pointInTime]);
 
   const getPlantData = (id) => {
-    return window?.gppt?.plants?.find((plant) => plant.id == id);
+    return plantList.find((plant) => plant.id == id);
   };
 
   return (
     <div className="garden-seedling p-3 rounded flex flex-wrap">
-      {nowSeedlings.map((item) => {
+      {nowSeedlings.map((item, index) => {
         const { imageUrl, name } = getPlantData(item.plant.id);
         return (
-          <div className="p-1 w-1/3 md:w-1/6">
+          <div className="p-1 w-1/3 md:w-1/6" key={index}>
             <div
               className="flex justify-center h-full p-2 rounded bg-[rgba(0,0,0,0.05)] cursor-pointer"
               onClick={() => itemClickHandler(item.id)}

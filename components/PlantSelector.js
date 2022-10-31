@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react";
-import { getPlants } from "../utils/window";
+import { useState, useEffect, useContext } from "react";
+import { SettingsContext } from "../context/SettingsContext";
 import Field from "./Field";
 
 const PlantSelector = ({ selectedPlant, selectedPlantHandler }) => {
-  const plantsList = getPlants();
+  const [settings] = useContext(SettingsContext);
   const [searchValue, setSearchValue] = useState("");
-  const [searchResults, setSearchResults] = useState(plantsList);
+  const [searchResults, setSearchResults] = useState(settings.plants);
+  const plantList = settings.plants || [];
 
   const getPlantObject = (plantId) => {
-    return plantsList.find((plant) => plant.id === plantId);
+    return plantList.find((plant) => plant.id === plantId);
   };
 
   const handleSearchFieldChange = (e) => {
@@ -22,7 +23,7 @@ const PlantSelector = ({ selectedPlant, selectedPlantHandler }) => {
 
   useEffect(() => {
     setSearchResults(
-      plantsList.filter((item) =>
+      plantList.filter((item) =>
         item.name.toLowerCase().includes(searchValue.toLowerCase())
       )
     );
