@@ -12,6 +12,7 @@ export const initialState = {
   dateChanging: true,
   tool: false,
   toolSettings: {},
+  plants: [],
 };
 
 export const settingsReducer = (state, action) => {
@@ -46,6 +47,8 @@ export const settingsReducer = (state, action) => {
         toolSettings: {},
         dateChanging: true,
       };
+    case "set_plants":
+      return { ...state, plants: payload };
     default:
       return { ...state };
   }

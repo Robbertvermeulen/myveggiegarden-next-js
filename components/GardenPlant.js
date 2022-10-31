@@ -1,6 +1,10 @@
+import { useContext } from "react";
+import { SettingsContext } from "../context/SettingsContext";
+
 const GardenPlant = ({ id }) => {
+  const [settings] = useContext(SettingsContext);
   const getPlantData = () => {
-    return window?.gppt?.plants?.find((plant) => plant.id == id);
+    return settings?.plants.find((plant) => plant.id == id);
   };
   const { imageUrl } = getPlantData();
 

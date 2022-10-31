@@ -21,7 +21,6 @@ import SeedlingEditingModal from "../components/SeedlingEditingModal";
 
 export default function gardenPlanEditor({ data }) {
   const [settings, dispatchSetting] = useContext(SettingsContext);
-  console.log(data);
   const { planDetails, planning } = data.gardenPlan;
   const planningObj = planning && JSON.parse(planning);
   const [state, dispatch] = useReducer(gardenPlanReducer, {
@@ -350,7 +349,7 @@ export default function gardenPlanEditor({ data }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const { data } = await client.query({
     query: gql`
       query GardenPlan {
