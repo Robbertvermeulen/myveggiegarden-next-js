@@ -1,12 +1,10 @@
 import { useContext } from "react";
-import { GardenPlanContext } from "../context/GardenPlanContext";
 import { SettingsContext } from "../context/SettingsContext";
 import DateChanger from "./DateChanger";
 import { weekHasContents } from "../utils/gardenPlan";
 
-const PointInTimeSelector = ({ weekClickHandler }) => {
+const PointInTimeSelector = ({ areas, seedlings, weekClickHandler }) => {
   const [settings, dispatchSetting] = useContext(SettingsContext);
-  const [gardenPlan] = useContext(GardenPlanContext);
   const { week, year } = settings.pointInTime;
 
   const handleNextYearButtonClick = () => {
@@ -47,7 +45,11 @@ const PointInTimeSelector = ({ weekClickHandler }) => {
             const classNames = [
               "flex items-center justify-center rounded-full w-9 h-9 z-10 text-sm cursor-pointer",
             ];
-            const contents = weekHasContents(gardenPlan, weekNumber, year);
+            const contents = weekHasContents(
+              { areas, seedlings },
+              weekNumber,
+              year
+            );
 
             if (week === weekNumber) {
               classNames.push("bg-slate-700 text-white");

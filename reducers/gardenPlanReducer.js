@@ -9,7 +9,7 @@ export const initialState = {
   actualLength: 20,
   actualWidth: 10,
   areas: [],
-  seedling: [],
+  seedlings: [],
   selectedArea: null,
 };
 
@@ -125,8 +125,8 @@ export const gardenPlanReducer = (state, action) => {
     case "add_seedling":
       return {
         ...state,
-        seedling: [
-          ...state.seedling,
+        seedlings: [
+          ...state.seedlings,
           {
             id: createId(),
             timeframe: {
@@ -140,7 +140,7 @@ export const gardenPlanReducer = (state, action) => {
     case "edit_seedling":
       return {
         ...state,
-        seedling: state.seedling.map((item) => {
+        seedlings: state.seedlings.map((item) => {
           if (payload.seedlingId === item.id) {
             return {
               ...item,
@@ -154,7 +154,7 @@ export const gardenPlanReducer = (state, action) => {
     case "delete_seedling":
       return {
         ...state,
-        seedling: state.seedling.filter(
+        seedlings: state.seedlings.filter(
           (item) => payload.seedlingId != item.id
         ),
       };

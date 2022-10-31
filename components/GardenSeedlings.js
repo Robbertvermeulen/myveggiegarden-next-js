@@ -1,14 +1,20 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { isInTimeframe } from "../utils/time";
-import { GardenPlanContext } from "../context/GardenPlanContext";
 import { SettingsContext } from "../context/SettingsContext";
 
-const GardenSeedlings = ({ addButtonClickHandler, itemClickHandler }) => {
-  const [gardenPlan] = useContext(GardenPlanContext);
+const GardenSeedlings = ({
+  seedlings,
+  addButtonClickHandler,
+  itemClickHandler,
+}) => {
   const [settings] = useContext(SettingsContext);
-  const nowSeedlings = gardenPlan.seedling.filter((item) =>
-    isInTimeframe(settings.pointInTime, item.timeframe)
-  );
+  const nowSeedlings = useMemo(() => {
+    return (
+      seedlings?.filter((item) =>
+        isInTimeframe(settings.pointInTime, item.timeframe)
+      ) || []
+    );
+  }, [seedlings, settings.pointInTime]);
 
   const getPlantData = (id) => {
     return window?.gppt?.plants?.find((plant) => plant.id == id);
