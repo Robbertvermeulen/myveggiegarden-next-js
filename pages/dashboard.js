@@ -3,7 +3,7 @@ import Link from "next/link";
 import useAuth from "../hooks/useAuth";
 
 export default function DashboardPage() {
-  const [authToken, setAuthToken] = useAuth();
+  const { loggedIn, setAuthToken } = useAuth();
   const router = useRouter();
 
   const handleLogoutClick = () => {
@@ -13,7 +13,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-      {(!authToken && (
+      {(!loggedIn && (
         <div>
           Please <Link href="/login">login</Link> first
         </div>

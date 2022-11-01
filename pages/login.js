@@ -4,6 +4,7 @@ import { storeAuthTokenInStorage } from "../utils/auth";
 import { useRouter } from "next/router";
 import Field from "../components/Field";
 import useAuth from "../hooks/useAuth";
+import { getAuthToken } from "../utils/api";
 
 const initialState = {
   login: "test@test.nl",
@@ -24,7 +25,7 @@ const reducer = (state, action) => {
 };
 
 export default function LoginPage() {
-  const [authToken, setAuthToken] = useAuth();
+  const { setAuthToken } = useAuth();
   const router = useRouter();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -32,20 +33,12 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       if (state.login && state.password) {
-        const response = await axios.post(
-          process.env.NEXT_PUBLIC_WORDPRESS_API_URI +
-            "/wp-json/jwt-auth/v1/token",
-          { username: state.login, password: state.password }
-        );
-        if (response?.data) {
-          const { token } = response.data;
-          if (token) {
-            setAuthToken(token);
-            router.push("/dashboard");
-          }
+        const token = await getAuthToken(state.login, state.password);
+        if (token) {
+          setAuthToken(token);
+          router.push("/dashboard");
         }
       } else {
-        // localStorage.removeItem("authToken");
         dispatch({
           type: "set_errors",
           payload: { errors: ["Please enter both fields."] },

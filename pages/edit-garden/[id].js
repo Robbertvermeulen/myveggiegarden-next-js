@@ -26,12 +26,13 @@ import Modal from "../../components/Modal";
 import PointInTimeSelector from "../../components/PointInTimeSelector";
 import SoilEditingModal from "../../components/SoilEditingModal";
 import SeedlingEditingModal from "../../components/SeedlingEditingModal";
-import axios from "axios";
+import useAuth from "../../hooks/useAuth";
 
 const GardenPlanEditorContext = createContext();
 
 export default function GardenPlanEditorPage() {
   const router = useRouter();
+  const { loggedIn } = useAuth();
   const [settings, dispatchSetting] = useContext(SettingsContext);
   const [state, dispatch] = useReducer(gardenPlanReducer, initialState);
   const [pointInTimeSelector, setPointInTimeSelector] = useState(false);
@@ -144,9 +145,11 @@ export default function GardenPlanEditorPage() {
   };
 
   const handleSaveButtonClick = async () => {
+    if (!loggedIn) return;
     try {
-      dispatch({ type: "save" });
-      const response = await axios.post();
+      dispatch({ type: "start_saving" });
+      const updated = await updateGardenPlan({ title: state.title });
+      if (updated) dispatch({ type: "stop_saving" });
     } catch (err) {
       console.error(err.message);
     }

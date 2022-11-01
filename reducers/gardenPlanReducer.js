@@ -23,9 +23,9 @@ export const initialState = {
 export const gardenPlanReducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
-    case "save":
+    case "start_saving":
       return { ...state, saving: true };
-    case "done_saving":
+    case "stop_saving":
       return { ...state, saving: false };
     case "set_state":
       return { ...state, ...payload };

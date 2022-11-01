@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { validateAuthToken } from "../utils/api";
 import {
   storeAuthTokenInStorage,
   getAuthTokenFromLocalStorage,
@@ -7,6 +8,7 @@ import {
 
 const useAuth = () => {
   const [authToken, setAuthToken] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     const token = getAuthTokenFromLocalStorage();
@@ -14,11 +16,23 @@ const useAuth = () => {
   }, []);
 
   useEffect(() => {
-    if (authToken) storeAuthTokenInStorage(authToken);
-    else removeAuthTokenFromStorage();
+    (async () => {
+      if (authToken) {
+        const valid = await validateAuthToken(authToken);
+        if (valid) {
+          storeAuthTokenInStorage(authToken);
+          setLoggedIn(true);
+        } else {
+          removeAuthTokenFromStorage();
+          setLoggedIn(false);
+        }
+      } else {
+        removeAuthTokenFromStorage();
+      }
+    })();
   }, [authToken]);
 
-  return [authToken, setAuthToken];
+  return { loggedIn, authToken, setAuthToken };
 };
 
 export default useAuth;
