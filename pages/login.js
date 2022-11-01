@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useReducer } from "react";
 import { storeAuthTokenInStorage } from "../utils/auth";
+import { useRouter } from "next/router";
 import Field from "../components/Field";
+import useAuth from "../hooks/useAuth";
 
 const initialState = {
   login: "test@test.nl",
@@ -22,6 +24,8 @@ const reducer = (state, action) => {
 };
 
 export default function LoginPage() {
+  const [authToken, setAuthToken] = useAuth();
+  const router = useRouter();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const handleSubmitButtonClick = async (e) => {
@@ -36,8 +40,8 @@ export default function LoginPage() {
         if (response?.data) {
           const { token } = response.data;
           if (token) {
-            storeAuthTokenInStorage(token);
-            console.log("Logged in", token);
+            setAuthToken(token);
+            router.push("/dashboard");
           }
         }
       } else {
