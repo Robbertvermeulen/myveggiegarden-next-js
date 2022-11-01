@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useReducer } from "react";
+import { storeAuthTokenInStorage } from "../utils/auth";
 import Field from "../components/Field";
 
 const initialState = {
@@ -35,8 +36,8 @@ export default function LoginPage() {
         if (response?.data) {
           const { token } = response.data;
           if (token) {
-            localStorage.setItem("authToken", response.data.token);
-            console.log("Logged in", response.data.token);
+            storeAuthTokenInStorage(token);
+            console.log("Logged in", token);
           }
         }
       } else {
