@@ -26,6 +26,7 @@ import Modal from "../../components/Modal";
 import PointInTimeSelector from "../../components/PointInTimeSelector";
 import SoilEditingModal from "../../components/SoilEditingModal";
 import SeedlingEditingModal from "../../components/SeedlingEditingModal";
+import axios from "axios";
 
 const GardenPlanEditorContext = createContext();
 
@@ -142,6 +143,15 @@ export default function GardenPlanEditorPage() {
     };
   };
 
+  const handleSaveButtonClick = async () => {
+    try {
+      dispatch({ type: "save" });
+      const response = await axios.post();
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -222,8 +232,12 @@ export default function GardenPlanEditorPage() {
                       </div>
                     </div>
                   </div>
-                  <button className="button button-primary shadow-md">
-                    Save
+                  <button
+                    className="button button-primary shadow-md"
+                    disabled={state.saving}
+                    onClick={handleSaveButtonClick}
+                  >
+                    {(!state.saving && "Save") || "Saving.."}
                   </button>
                 </div>
               </div>
@@ -238,8 +252,12 @@ export default function GardenPlanEditorPage() {
                         />
                       </div>
                       <div>
-                        <button className="button button-primary shadow-md hidden lg:block">
-                          Save
+                        <button
+                          className="button button-primary shadow-md hidden lg:block"
+                          disabled={state.saving}
+                          onClick={handleSaveButtonClick}
+                        >
+                          {(!state.saving && "Save") || "Saving.."}
                         </button>
                       </div>
                     </header>
